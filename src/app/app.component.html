@@ -13,19 +13,19 @@
   <div class="container">
     <div class="timer">
       <div class="timer__block">
-        <div class="time minute">{{pausable$ | async}}</div>
+        <div class="time minute">{{ lastValue | countdown: 'minutes' }}</div>
         <div class="title">Minutes</div>
       </div>
       <div class="timer__block">
-        <!-- <div class="time second">{{pausable$ | async}}</div> -->
+        <div class="time second">{{ lastValue | countdown: 'seconds' }}</div>
         <div class="title">Seconds</div>
       </div>
     </div>
     <div class="buttons">
-      <button class="button start" (click)="pauser$.next(false)" *ngIf="pauserIndicator$ | async">Start</button>
-      <button class="button stop" (click)="pauser$.next(true)" *ngIf="!(pauserIndicator$ | async)">Stop</button>
-      <button class="button pause">Wait</button>
-      <button class="button reset">Reset</button>
+      <button class="button start" *ngIf="pauser$.value" (click)="pauser$.next(false)">Start</button>
+      <button class="button stop" *ngIf="!pauser$.value" (click)="pauser$.next(true); lastValue = 0;">Stop</button>
+      <button class="button pause" (dblclick)="pauser$.next(true)">Wait</button>
+      <button class="button reset" (click)="lastValue = 0; pauser$.next(true)">Reset</button>
     </div>
   </div>
 

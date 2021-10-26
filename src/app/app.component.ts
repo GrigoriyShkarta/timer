@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, interval, NEVER, Observable, Subject, Subscription, timer } from 'rxjs';
-import { last, map, mergeMap, startWith, switchMap, tap, timeout, withLatestFrom } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { BehaviorSubject, interval, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { decisecondMilliseconds } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -8,22 +9,19 @@ import { last, map, mergeMap, startWith, switchMap, tap, timeout, withLatestFrom
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  source$ = interval(1000);
-  pauser$ = new Subject();
-  pauserIndicator$ = this.pauser$.pipe(
-    startWith(true),
-    map(val => val ?? false)
-    );
+  pauser$ = new BehaviorSubject(true);
 
   lastValue = 0;
-  pausable$ = this.pauser$.pipe(
-    withLatestFrom(this.source$),
-    switchMap(([paused, seconds]) => {
-      if (!paused) {
-        console.log();
-        this.lastValue = seconds;
-      }
-    return paused ? NEVER : this.source$.pipe(startWith(this.lastValue));
-  }));
+
+  constructor() {
+    this.pauser$.pipe(
+      switchMap((paused) => {
+        if (paused) {
+          return of(this.lastValue);
+        }
+        return interval(decisecondMilliseconds).pipe(map(() => this.lastValue += decisecondMilliseconds));
+      })
+    ).subscribe();
+  }
 
 }

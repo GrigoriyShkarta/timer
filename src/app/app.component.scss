@@ -9,7 +9,7 @@ $mainColor2: #1059b8;
 }
 
 .container {
-  width: 60%;
+  width: 40%;
   height: 100%;
   margin: 0 auto;
   margin-top: 150px;
@@ -47,7 +47,6 @@ $mainColor2: #1059b8;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 800px;
   margin: 0 auto;
   margin-top: 150px;
   .button {
@@ -72,9 +71,5 @@ $mainColor2: #1059b8;
         color: white;
       }
     }
-
-    // &.stop {
-    //   // display: none;
-    // }
   }
 }
